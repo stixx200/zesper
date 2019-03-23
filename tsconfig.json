@@ -15,7 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@zesper/api-interface": ["libs/api-interface/src/index.ts"]
+      "@zesper/api-interface": ["libs/api-interface/src/index.ts"],
+      "@zesper/api/*": ["apps/api/src/*"]
     }
   },
   "exclude": ["node_modules", "tmp"]

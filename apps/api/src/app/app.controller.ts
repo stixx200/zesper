@@ -3,6 +3,7 @@ import { Controller, Get } from '@nestjs/common';
 import { Message } from '@zesper/api-interface';
 
 import { AppService } from './app.service';
+import { PrismaService } from './prisma.service';
 
 @Controller()
 export class AppController {
