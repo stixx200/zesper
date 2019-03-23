@@ -1,0 +1,21 @@
+<mat-toolbar color="primary">
+  <span>{{ title }}</span>
+
+  <div class="navigation" *ngIf="(user$ | async)">
+    <button mat-button routerLink="orders" routerLinkActive="active">
+      <span>Bestellungen</span>
+    </button>
+
+    <!-- This fills the remaining space of the current row -->
+    <span class="fill-remaining-space"></span>
+
+    <div *ngIf="(user$ | async)" routerLink="/user">
+      <mat-icon class="icon" *ngIf="!(user$ | async).picture"
+        >account_circle</mat-icon
+      >
+    </div>
+    <div *ngIf="(user$ | async)">
+      <mat-icon class="icon" (click)="logout()">lock</mat-icon>
+    </div>
+  </div>
+</mat-toolbar>

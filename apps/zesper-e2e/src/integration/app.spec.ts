@@ -1,9 +1,9 @@
-import { getGreeting } from '../support/app.po';
+import { getTitle } from '../support/app.po';
 
-describe('Hello Nx', () => {
+describe('Startscreen', () => {
   beforeEach(() => cy.visit('/'));
 
-  it('should display welcome message', () => {
-    getGreeting().contains('Welcome to zesper!');
+  it('shows page title', () => {
+    getTitle().contains('Zesper');
   });
 });

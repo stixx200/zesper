@@ -1,0 +1,38 @@
+<div class="spinner-container" *ngIf="showSpinner">
+  <mat-spinner color="accent"></mat-spinner>
+</div>
+
+<mat-card>
+  <mat-card-header> <p>Login</p> </mat-card-header>
+  <form class="center" #loginForm="ngForm" (ngSubmit)="login(loginForm)">
+    <mat-card-content>
+      <mat-form-field class="center">
+        <mat-label>Email</mat-label>
+        <input
+          matInput
+          [(ngModel)]="username"
+          placeholder="Email"
+          name="email"
+          required
+        />
+      </mat-form-field>
+      <mat-form-field class="center">
+        <mat-label>Password</mat-label>
+        <input
+          matInput
+          [(ngModel)]="password"
+          placeholder="Password"
+          name="password"
+          required
+        />
+      </mat-form-field>
+    </mat-card-content>
+    <mat-card-actions>
+      <div class="center">
+        <button mat-raised-button type="submit" class="center" color="primary">
+          Login
+        </button>
+      </div>
+    </mat-card-actions>
+  </form>
+</mat-card>

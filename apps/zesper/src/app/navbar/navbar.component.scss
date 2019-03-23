@@ -1,0 +1,23 @@
+.fill-remaining-space {
+  flex: 1 1 auto;
+}
+
+.icon {
+  padding: 0 1rem;
+  cursor: pointer;
+}
+
+.navigation {
+  margin-left: 1rem;
+  margin-right: 1rem;
+  height: 100%;
+
+  button {
+    height: 100%;
+    border-radius: 0;
+  }
+
+  .active {
+    background-color: rgba(220, 220, 220, 0.5);
+  }
+}
