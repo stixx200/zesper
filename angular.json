@@ -34,6 +34,9 @@
           },
           "configurations": {
             "production": {
+              "i18nFile": "apps/zesper/src/locale/messages.de.xlf",
+              "i18nFormat": "xlf",
+              "i18nLocale": "de",
               "fileReplacements": [
                 {
                   "replace": "apps/zesper/src/environments/environment.ts",

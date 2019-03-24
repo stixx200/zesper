@@ -1,15 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../auth/auth.service';
+import { select, Store } from '@ngrx/store';
+import { AppState, selectCurrentUser } from '../store/app.reducers';
 
 @Component({
   selector: 'zesper-user',
   templateUrl: './user.component.html',
-  styleUrls: ['./user.component.css']
+  styleUrls: ['./user.component.css'],
 })
 export class UserComponent implements OnInit {
-  user$ = this.userService.getCurrentUser();
+  currentUser$ = this.store.pipe(select(selectCurrentUser));
 
-  constructor(private readonly userService: AuthService) {}
+  constructor(private readonly store: Store<AppState>) {}
 
   ngOnInit() {}
 }

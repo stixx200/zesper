@@ -3,27 +3,30 @@ import {
   ActivatedRouteSnapshot,
   CanActivate,
   Router,
-  RouterStateSnapshot
+  RouterStateSnapshot,
 } from '@angular/router';
+import { select, Store } from '@ngrx/store';
 import { User } from '@zesper/api-interface';
 import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
-import { AuthService } from './auth.service';
+import { AppState, selectCurrentUser } from '../store/app.reducers';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthGuard implements CanActivate {
+  currentUser$ = this.store.pipe(select(selectCurrentUser));
+
   constructor(
-    private readonly authService: AuthService,
-    private readonly router: Router
+    private readonly store: Store<AppState>,
+    private readonly router: Router,
   ) {}
 
   canActivate(
     next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
+    state: RouterStateSnapshot,
   ): Observable<boolean> {
-    return this.authService.getCurrentUser().pipe(
+    return this.currentUser$.pipe(
       take(1),
       map((user: User) => {
         if (!user) {
@@ -31,7 +34,7 @@ export class AuthGuard implements CanActivate {
           return false;
         }
         return true;
-      })
+      }),
     );
   }
 }

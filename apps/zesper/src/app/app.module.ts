@@ -1,6 +1,8 @@
+import { registerLocaleData } from '@angular/common';
+import localeDe from '@angular/common/locales/de';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
@@ -13,6 +15,14 @@ import { UserComponent } from './user/user.component';
 import { LoginComponent } from './login/login.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { OrdersComponent } from './orders/orders.component';
+import { StoreModule } from '@ngrx/store';
+import { reducers, metaReducers } from './store/app.reducers';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { environment } from '../environments/environment';
+import { EffectsModule } from '@ngrx/effects';
+import { effects } from './store/app.effects';
+
+registerLocaleData(localeDe, 'de');
 
 @NgModule({
   declarations: [
@@ -21,7 +31,7 @@ import { OrdersComponent } from './orders/orders.component';
     UserComponent,
     LoginComponent,
     PageNotFoundComponent,
-    OrdersComponent
+    OrdersComponent,
   ],
   imports: [
     BrowserModule,
@@ -30,9 +40,12 @@ import { OrdersComponent } from './orders/orders.component';
     FormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    SharedModule
+    SharedModule,
+    StoreModule.forRoot(reducers, { metaReducers }),
+    EffectsModule.forRoot(effects),
+    !environment.production ? StoreDevtoolsModule.instrument() : [],
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [{ provide: LOCALE_ID, useValue: 'de' }],
+  bootstrap: [AppComponent],
 })
 export class AppModule {}

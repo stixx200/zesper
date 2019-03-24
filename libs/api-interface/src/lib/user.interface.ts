@@ -1,5 +1,1 @@
-export interface User {
-  email: string;
-  displayName?: string;
-  picture?: string;
-}
+export { User } from '@zesper/api/app/graphql.ts';

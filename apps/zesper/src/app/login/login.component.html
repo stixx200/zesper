@@ -3,14 +3,17 @@
 </div>
 
 <mat-card>
-  <mat-card-header> <p>Login</p> </mat-card-header>
+  <mat-card-header>
+    <p i18n="site header for login page">Login</p>
+  </mat-card-header>
   <form class="center" #loginForm="ngForm" (ngSubmit)="login(loginForm)">
     <mat-card-content>
       <mat-form-field class="center">
         <mat-label>Email</mat-label>
         <input
           matInput
-          [(ngModel)]="username"
+          type="text"
+          [(ngModel)]="email"
           placeholder="Email"
           name="email"
           required
@@ -20,6 +23,7 @@
         <mat-label>Password</mat-label>
         <input
           matInput
+          type="password"
           [(ngModel)]="password"
           placeholder="Password"
           name="password"

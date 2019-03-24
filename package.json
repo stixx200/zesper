@@ -25,7 +25,8 @@
     "workspace-schematic": "./node_modules/.bin/nx workspace-schematic",
     "dep-graph": "./node_modules/.bin/nx dep-graph",
     "help": "./node_modules/.bin/nx help",
-    "get-schema": "graphql get-schema -p prisma"
+    "get-schema": "graphql get-schema -p prisma",
+    "generate-translation": "ng xi18n --output-path src/locale"
   },
   "private": true,
   "dependencies": {
@@ -43,6 +44,8 @@
     "@nestjs/core": "6.0.1",
     "@nestjs/graphql": "6.0.1",
     "@nestjs/platform-express": "6.0.1",
+    "@ngrx/effects": "^7.3.0",
+    "@ngrx/store": "^7.3.0",
     "apollo-server-express": "2.4.8",
     "core-js": "^2.5.4",
     "graphql": "14.1.1",
@@ -58,6 +61,8 @@
     "@angular/language-service": "^7.0.0",
     "@nestjs/schematics": "6.0.1",
     "@nestjs/testing": "6.0.1",
+    "@ngrx/schematics": "^7.3.0",
+    "@ngrx/store-devtools": "^7.3.0",
     "@nrwl/builders": "7.7.2",
     "@nrwl/schematics": "7.7.2",
     "@types/jest": "24.0.9",
@@ -66,11 +71,11 @@
     "codelyzer": "~4.5.0",
     "cypress": "^3.2.0",
     "dotenv": "6.2.0",
+    "graphql-cli": "3.0.11",
     "jest": "24.1.0",
     "jest-preset-angular": "^7.0.1",
     "prettier": "1.15.2",
     "ts-jest": "24.0.0",
-    "graphql-cli": "3.0.11",
     "ts-node": "~7.0.0",
     "tslint": "~5.11.0",
     "typescript": "3.2.2"

@@ -7,17 +7,33 @@
   cursor: pointer;
 }
 
-.navigation {
-  margin-left: 1rem;
-  margin-right: 1rem;
+.small-space {
+  width: 1rem;
+}
+
+.navbar-element {
   height: 100%;
+  border-radius: 0;
+  cursor: pointer;
 
-  button {
-    height: 100%;
-    border-radius: 0;
-  }
+  display: flex;
+  align-items: center;
+}
 
-  .active {
-    background-color: rgba(220, 220, 220, 0.5);
+.active {
+  background-color: rgba(220, 220, 220, 0.5);
+}
+
+.account-icon {
+  position: relative;
+  transform: translateY(-.5rem);
+
+  .account-icon-title {
+    position: absolute;
+    bottom: 0;
+    font-size: 50%;
+    line-height: 1rem;
+    width: 100%;
+    text-align: center;
   }
 }
