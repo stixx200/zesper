@@ -1,9 +1,13 @@
-import { getTitle } from '../support/app.po';
+import { getToolbar } from '../support/app.po';
 
 describe('Startscreen', () => {
   beforeEach(() => cy.visit('/'));
 
-  it('shows page title', () => {
-    getTitle().contains('Zesper');
+  it('contains a toolbar', () => {
+    // assert redirected to /login
+    cy.url().should('contain', '/login');
+
+    // assert correct title in toolbar
+    getToolbar().contains('Zesper');
   });
 });

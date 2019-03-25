@@ -26,7 +26,6 @@
 
 .account-icon {
   position: relative;
-  transform: translateY(-.5rem);
 
   .account-icon-title {
     position: absolute;
@@ -35,5 +34,10 @@
     line-height: 1rem;
     width: 100%;
     text-align: center;
+    padding-bottom: .5rem;
+  }
+
+  .icon {
+    padding-bottom: .5rem;
   }
 }

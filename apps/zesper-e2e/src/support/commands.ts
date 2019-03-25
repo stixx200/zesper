@@ -23,3 +23,38 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+
+// add new command to the existing Cypress interface
+declare global {
+  namespace Cypress {
+    interface Greeting {
+      greeting: string,
+      name: string
+    }
+
+    interface Chainable {
+      /**
+       * Yields sum of the arguments.
+       *
+       * @memberof Cypress.Chainable
+       *
+       * @example
+       ```
+       cy.sum(2, 3).should('equal', 5)
+       ```
+       */
+      login: () => Chainable
+    }
+  }
+}
+
+export function login() {
+  cy.fixture('credentials').then(({ email, password }) => {
+    cy.visit('/login');
+    cy.get('input[name=email]').type(email);
+    cy.get('input[name=password]').type(password);
+    cy.get('button[type=submit]').click();
+  });
+}
+
+Cypress.Commands.add('login', login);
