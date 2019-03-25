@@ -5,12 +5,13 @@
  */
 
 /* tslint:disable */
-export interface IQuery {
-    users(): User[] | Promise<User[]>;
-    temp__(): boolean | Promise<boolean>;
+export abstract class IQuery {
+    abstract users(): User[] | Promise<User[]>;
+
+    abstract temp__(): boolean | Promise<boolean>;
 }
 
-export interface User {
+export class User {
     id: string;
     name: string;
     email: string;

@@ -11,9 +11,6 @@ import { PrismaService } from './prisma.service';
   imports: [
     GraphQLModule.forRoot({
       typePaths: ['./apps/api/src/app/appmodel.graphql'],
-      definitions: {
-        path: join(process.cwd(), 'apps/api/src/app/graphql.ts')
-      }
     }) // settings for underlaying apollo server
   ],
   controllers: [AppController],

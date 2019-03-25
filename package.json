@@ -26,7 +26,8 @@
     "dep-graph": "./node_modules/.bin/nx dep-graph",
     "help": "./node_modules/.bin/nx help",
     "get-schema": "graphql get-schema -p prisma",
-    "generate-translation": "ng xi18n --output-path src/locale"
+    "generate-translation": "ng xi18n --output-path src/locale",
+    "generate-typings": "node tools/generate-typings"
   },
   "private": true,
   "dependencies": {
