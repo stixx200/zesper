@@ -1,1 +1,47 @@
-<p>Hello {{ (currentUser$ | async).name }}</p>
+<mat-card>
+  <mat-card-header>
+    <p i18n="Login page title">Account settings</p>
+  </mat-card-header>
+  <form class="center" #settingsForm="ngForm" (ngSubmit)="update()">
+    <mat-card-content>
+
+      <div class="col-right">
+        <h4>Avatar</h4>
+        <img class="avatar" src="https://raw.githubusercontent.com/nrwl/nx/master/nx-logo.png" alt="avatar"/>
+      </div>
+
+      <div class="col-left">
+        <mat-form-field class="field-group">
+          <mat-label>Email</mat-label>
+          <input
+            matInput
+            type="email"
+            [ngModel]="(currentUser$ | async).email"
+            placeholder="Email"
+            name="email"
+            required
+          />
+        </mat-form-field>
+
+        <mat-form-field class="field-group">
+          <mat-label>Name</mat-label>
+          <input
+            matInput
+            type="text"
+            [ngModel]="(currentUser$ | async).name"
+            placeholder="Name"
+            name="name"
+            required
+          />
+        </mat-form-field>
+      </div>
+    </mat-card-content>
+    <mat-card-actions>
+      <div class="center">
+        <button mat-raised-button type="submit" class="center" color="primary">
+          Update
+        </button>
+      </div>
+    </mat-card-actions>
+  </form>
+</mat-card>

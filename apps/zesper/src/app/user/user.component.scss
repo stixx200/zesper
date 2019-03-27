@@ -1,0 +1,34 @@
+mat-card-content {
+  overflow: hidden;
+  :after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}
+
+h4 {
+  margin-top: 0;
+}
+
+.col-right {
+  width: 30%;
+  float: right;
+}
+
+.col-left {
+  width: 60%;
+  float: left;
+}
+
+.avatar {
+  display: block;
+  width: 6rem;
+  height: auto;
+  border: 1px solid lightgray;
+  border-radius: 1rem;
+}
+
+.field-group {
+  width: 90%;
+}
