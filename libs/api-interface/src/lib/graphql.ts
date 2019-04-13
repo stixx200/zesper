@@ -13,6 +13,5 @@ export abstract class IQuery {
 
 export class User {
     id: string;
-    name: string;
     email: string;
 }

@@ -1,9 +1,6 @@
-type Query {
-  users: [User!]!
-}
-
 type User {
-  id: ID!
+  id: ID! @id
   name: String!
   email: String!
+  password: String!
 }

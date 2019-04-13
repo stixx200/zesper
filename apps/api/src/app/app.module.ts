@@ -1,19 +1,19 @@
+import { join } from 'path';
 import { Module } from '@nestjs/common';
-import { GraphQLModule } from '@nestjs/graphql';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { join } from 'path';
-import { UserResolver } from './user.resolver';
-import { PrismaService } from './prisma.service';
+import { GraphQLModule } from '@nestjs/graphql';
+import { UsersModule } from '../users/users.module';
 
 @Module({
   imports: [
     GraphQLModule.forRoot({
-      typePaths: ['./apps/api/src/app/appmodel.graphql'],
-    }) // settings for underlaying apollo server
+      typePaths: ['./apps/api/src/schema.graphql'], // Schema for api graphql interface
+    }),
+    UsersModule,
   ],
   controllers: [AppController],
-  providers: [AppService, PrismaService, UserResolver]
+  providers: [AppService],
 })
 export class AppModule {}
