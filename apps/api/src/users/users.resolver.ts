@@ -63,4 +63,16 @@ export class UsersResolver {
       token: this.generateToken({ id: user.id }),
     };
   }
+
+  @Mutation()
+  async deleteUser(@Args() args, @Info() info): Promise<User> {
+    return await this.prisma.mutation.deleteUser(
+      {
+        where: {
+          id: args.id,
+        },
+      },
+      info,
+    );
+  }
 }
