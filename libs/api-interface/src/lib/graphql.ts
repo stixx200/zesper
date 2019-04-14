@@ -11,6 +11,11 @@ export class CreateUserInput {
     password: string;
 }
 
+export class LoginUserInput {
+    email: string;
+    password: string;
+}
+
 export class AuthPayload {
     token: string;
     user: User;
@@ -18,6 +23,8 @@ export class AuthPayload {
 
 export abstract class IMutation {
     abstract createUser(data: CreateUserInput): AuthPayload | Promise<AuthPayload>;
+
+    abstract login(data: LoginUserInput): AuthPayload | Promise<AuthPayload>;
 }
 
 export abstract class IQuery {
