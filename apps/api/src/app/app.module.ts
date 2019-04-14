@@ -1,4 +1,4 @@
-import { join } from 'path';
+import { Request } from 'express';
 import { Module } from '@nestjs/common';
 
 import { AppController } from './app.controller';
@@ -10,6 +10,11 @@ import { UsersModule } from '../users/users.module';
   imports: [
     GraphQLModule.forRoot({
       typePaths: ['./apps/api/src/schema.graphql'], // Schema for api graphql interface
+      context(request: { req: Request }) {
+        return {
+          request: request.req,
+        };
+      },
     }),
     UsersModule,
   ],

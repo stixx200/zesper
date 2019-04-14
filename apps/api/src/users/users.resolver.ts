@@ -1,9 +1,10 @@
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
-
-import { Resolver, Query, Mutation, Args, Info } from '@nestjs/graphql';
+import { Request } from 'express';
+import { Resolver, Query, Mutation, Args, Info, Context } from '@nestjs/graphql';
 import { PrismaService } from '../prisma/prisma.service';
 import { User, CreateUserInput, LoginUserInput, AuthPayload } from '@zesper/api-interface';
+import { updateSourceFileNode } from 'typescript';
 
 @Resolver('Users')
 export class UsersResolver {
@@ -13,6 +14,22 @@ export class UsersResolver {
     return jwt.sign({ userId: data.id }, process.env.JWT_SECRET, {
       expiresIn: '1d',
     });
+  }
+
+  private getUserId(request: Request, requireAuth = true) {
+    const header = request.headers.authorization as string;
+
+    if (header) {
+      const token = header.replace('Bearer ', '');
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      return decoded.userId;
+    }
+
+    if (requireAuth) {
+      throw new Error('Authentication required');
+    }
+
+    return null;
   }
 
   @Query()
@@ -65,11 +82,12 @@ export class UsersResolver {
   }
 
   @Mutation()
-  async deleteUser(@Args() args, @Info() info): Promise<User> {
+  async deleteUser(@Args() args, @Context() ctx, @Info() info): Promise<User> {
+    const userId = this.getUserId(ctx.request);
     return await this.prisma.mutation.deleteUser(
       {
         where: {
-          id: args.id,
+          id: userId,
         },
       },
       info,
