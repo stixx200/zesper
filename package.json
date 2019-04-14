@@ -31,8 +31,6 @@
   },
   "private": true,
   "dependencies": {
-    "@nestjs/common": "^6.0.0",
-    "@nestjs/core": "^6.0.0",
     "@angular/animations": "^7.0.0",
     "@angular/cdk": "~7.3.5",
     "@angular/common": "^7.0.0",
@@ -43,6 +41,8 @@
     "@angular/platform-browser": "^7.0.0",
     "@angular/platform-browser-dynamic": "^7.0.0",
     "@angular/router": "^7.0.0",
+    "@nestjs/common": "^6.0.0",
+    "@nestjs/core": "^6.0.0",
     "@nestjs/graphql": "^6.0.0",
     "@nestjs/platform-express": "^6.0.0",
     "@ngrx/effects": "^7.3.0",
@@ -58,13 +58,12 @@
     "zone.js": "^0.8.26"
   },
   "devDependencies": {
-    "ts-jest": "24.0.0",
-    "@nestjs/schematics": "6.0.1",
-    "@nestjs/testing": "6.0.1",
     "@angular-devkit/build-angular": "~0.13.0",
     "@angular/cli": "7.3.6",
     "@angular/compiler-cli": "~7.2.0",
     "@angular/language-service": "^7.0.0",
+    "@nestjs/schematics": "6.0.1",
+    "@nestjs/testing": "6.0.1",
     "@ngrx/schematics": "^7.3.0",
     "@ngrx/store-devtools": "^7.3.0",
     "@nrwl/builders": "7.7.2",
@@ -79,6 +78,7 @@
     "jest": "24.1.0",
     "jest-preset-angular": "^7.0.1",
     "prettier": "1.15.2",
+    "ts-jest": "24.0.0",
     "ts-node": "~7.0.0",
     "tslint": "~5.11.0",
     "typescript": "3.2.2"
