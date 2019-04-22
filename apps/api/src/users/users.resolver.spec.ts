@@ -33,6 +33,80 @@ describe('UsersResolver', () => {
       await resolver.users('args', 'info');
       expect(prismaServiceMock.query.users).toBeCalledWith('args', 'info');
     });
+
+    it('returns all users returned by prisma', async () => {
+      const data = [
+        {
+          id: 'id1',
+          name: 'name1',
+          email: 'test1@email.de',
+        },
+        {
+          id: 'id2',
+          name: 'name2',
+          email: 'test2@email.de',
+        },
+      ];
+
+      prismaServiceMock.query.users.mockResolvedValue(data);
+      const users = await resolver.users('args', 'info');
+      expect(users).toEqual(data);
+    });
+  });
+
+  describe('user', () => {
+    const userResultData = {
+      id: 'id1',
+      name: 'name',
+      email: 'test@email.de',
+    };
+
+    it('sends the expected query to prisma service', async () => {
+      await resolver.user({ query: { id: 'id1' } }, 'info');
+      expect(prismaServiceMock.query.user).toBeCalledWith(
+        {
+          where: {
+            id: 'id1',
+          },
+        },
+        'info',
+      );
+    });
+
+    it('prioritizes id over email', async () => {
+      await resolver.user({ query: { id: 'id1', email: 'some@email.de' } }, 'info');
+      expect(prismaServiceMock.query.user).toBeCalledWith(
+        {
+          where: {
+            id: 'id1',
+          },
+        },
+        'info',
+      );
+    });
+
+    it('returns user with given id', async () => {
+      prismaServiceMock.query.user.mockResolvedValue(userResultData);
+
+      const user = await resolver.user({ query: { id: 'id1' } }, '');
+      expect(user).toEqual(userResultData);
+    });
+
+    it('returns user with given email', async () => {
+      prismaServiceMock.query.user.mockResolvedValue(userResultData);
+
+      const user = await resolver.user({ query: { email: 'some@email.de' } }, '');
+      expect(user).toEqual(userResultData);
+    });
+
+    it('throws an error if neither id or email is given', async () => {
+      expect.assertions(1);
+      try {
+        await resolver.user({ query: {} }, '');
+      } catch (err) {
+        expect(err.message).toMatch(/provide either id or email/);
+      }
+    });
   });
 
   describe('createUser', () => {

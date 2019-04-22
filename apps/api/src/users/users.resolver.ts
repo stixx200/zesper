@@ -3,7 +3,7 @@ import * as jwt from 'jsonwebtoken';
 import { Request } from 'express';
 import { Resolver, Query, Mutation, Args, Info, Context } from '@nestjs/graphql';
 import { PrismaService } from '../prisma/prisma.service';
-import { User, CreateUserInput, LoginUserInput, AuthPayload } from '@zesper/api-interface';
+import { User, CreateUserInput, LoginUserInput, AuthPayload, UserQuery } from '@zesper/api-interface';
 
 @Resolver('Users')
 export class UsersResolver {
@@ -34,6 +34,29 @@ export class UsersResolver {
   @Query()
   async users(@Args() args, @Info() info): Promise<User[]> {
     return await this.prisma.query.users(args, info);
+  }
+
+  /**
+   * Queries a user with either id or email. If both are provided id is used.
+   * @param args
+   * @param info
+   */
+  @Query()
+  async user(@Args() args, @Info() info): Promise<User> {
+    const query: UserQuery = args.query;
+
+    if (!query.id && !query.email) {
+      throw new Error('You must provide either id or email!');
+    }
+
+    let opArgs;
+    if (query.id) {
+      opArgs = { where: { id: query.id } };
+    } else {
+      opArgs = { where: { email: query.email } };
+    }
+
+    return await this.prisma.query.user(opArgs, info);
   }
 
   @Mutation()

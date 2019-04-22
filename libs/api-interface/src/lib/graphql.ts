@@ -15,6 +15,11 @@ export class LoginUserInput {
   password: string;
 }
 
+export class UserQuery {
+  id?: string;
+  email?: string;
+}
+
 export class AuthPayload {
   token: string;
   user: User;
@@ -30,6 +35,8 @@ export abstract class IMutation {
 
 export abstract class IQuery {
   abstract users(): User[] | Promise<User[]>;
+
+  abstract user(query: UserQuery): User | Promise<User>;
 
   abstract temp__(): boolean | Promise<boolean>;
 }

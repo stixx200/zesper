@@ -1,5 +1,6 @@
 type Query {
   users: [User!]!
+  user(query: UserQuery!): User!
 }
 
 type Mutation {
@@ -12,6 +13,11 @@ type User {
   id: ID!
   email: String!
   name: String!
+}
+
+input UserQuery {
+  id: ID
+  email: String
 }
 
 input CreateUserInput {
