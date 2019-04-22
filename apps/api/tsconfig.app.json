@@ -4,6 +4,6 @@
     "outDir": "../../dist/out-tsc/apps/api",
     "types": ["node"]
   },
-  "exclude": ["**/*.spec.ts"],
+  "exclude": ["**/*.spec.ts", "**/__mocks__/*.ts"],
   "include": ["**/*.ts"]
 }

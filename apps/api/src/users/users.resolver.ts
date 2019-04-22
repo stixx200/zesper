@@ -4,19 +4,18 @@ import { Request } from 'express';
 import { Resolver, Query, Mutation, Args, Info, Context } from '@nestjs/graphql';
 import { PrismaService } from '../prisma/prisma.service';
 import { User, CreateUserInput, LoginUserInput, AuthPayload } from '@zesper/api-interface';
-import { updateSourceFileNode } from 'typescript';
 
 @Resolver('Users')
 export class UsersResolver {
   constructor(private readonly prisma: PrismaService) {}
 
-  private generateToken(data: { id: String }) {
+  private static generateToken(data: { id: String }) {
     return jwt.sign({ userId: data.id }, process.env.JWT_SECRET, {
       expiresIn: '1d',
     });
   }
 
-  private getUserId(request: Request, requireAuth = true) {
+  private static getUserId(request: Request, requireAuth = true) {
     const header = request.headers.authorization as string;
 
     if (header) {
@@ -42,12 +41,11 @@ export class UsersResolver {
     const emailTaken = await this.prisma.exists.User({
       email: args.data.email,
     });
-
     if (emailTaken) {
       throw new Error('Email already taken!');
     }
-    const password = await bcrypt.hash(args.data.password, 10);
 
+    const password = await bcrypt.hash(args.data.password, 10);
     const user = await this.prisma.mutation.createUser({
       data: {
         name: args.data.name,
@@ -58,7 +56,7 @@ export class UsersResolver {
 
     return {
       user,
-      token: this.generateToken({ id: user.id }),
+      token: UsersResolver.generateToken({ id: user.id }),
     };
   }
 
@@ -77,13 +75,13 @@ export class UsersResolver {
     }
     return {
       user,
-      token: this.generateToken({ id: user.id }),
+      token: UsersResolver.generateToken({ id: user.id }),
     };
   }
 
   @Mutation()
   async deleteUser(@Args() args, @Context() ctx, @Info() info): Promise<User> {
-    const userId = this.getUserId(ctx.request);
+    const userId = UsersResolver.getUserId(ctx.request);
     return await this.prisma.mutation.deleteUser(
       {
         where: {
