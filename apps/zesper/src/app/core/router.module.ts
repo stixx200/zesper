@@ -6,9 +6,11 @@ import { PageNotFoundComponent } from '../page-not-found/page-not-found.componen
 import { LoginComponent } from '../login/login.component';
 import { UserComponent } from '../user/user.component';
 import { environment } from '../../environments/environment';
+import { SignupComponent } from '../signup/signup.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/orders', pathMatch: 'full' },
+  { path: 'signup', component: SignupComponent },
   { path: 'login', component: LoginComponent },
   { path: 'user', component: UserComponent, canActivate: [AuthGuard] },
   { path: 'orders', component: OrdersComponent, canActivate: [AuthGuard] },

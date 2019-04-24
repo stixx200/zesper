@@ -1,6 +1,5 @@
 <mat-toolbar color="primary">
   <span>{{ title }}</span>
-
   <ng-template [ngIf]="(currentUser$ | async)">
     <span class="small-space"></span>
     <button id="btn-orders" mat-button class="navbar-element" routerLink="orders" routerLinkActive="active">
@@ -12,7 +11,7 @@
 
     <div id="btn-user" routerLink="/user" routerLinkActive="active" class="account-icon navbar-element">
       <mat-icon class="icon">account_circle</mat-icon>
-      <span class="account-icon-title">{{(currentUser$ | async)?.name}}</span>
+      <span class="account-icon-title">{{(currentUser$ | async)?.email}}</span>
     </div>
 
     <mat-icon id="btn-logout" (click)="logout()" class="icon navbar-element">lock_open</mat-icon>

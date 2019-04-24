@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { select, Store } from '@ngrx/store';
-import { AppState, selectCurrentUser } from '../store/app.reducers';
+import { UserService } from './user.service';
 
 @Component({
   selector: 'zesper-user',
@@ -8,13 +7,13 @@ import { AppState, selectCurrentUser } from '../store/app.reducers';
   styleUrls: ['./user.component.scss'],
 })
 export class UserComponent implements OnInit {
-  currentUser$ = this.store.pipe(select(selectCurrentUser));
+  currentUser$ = this.userService.currentUser$;
 
-  constructor(private readonly store: Store<AppState>) {}
+  constructor(private readonly userService: UserService) {}
 
   ngOnInit() {}
 
   update() {
-    // this.store.dispatch(new )
+
   }
 }

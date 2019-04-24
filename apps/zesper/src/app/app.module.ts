@@ -15,12 +15,9 @@ import { UserComponent } from './user/user.component';
 import { LoginComponent } from './login/login.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { OrdersComponent } from './orders/orders.component';
-import { StoreModule } from '@ngrx/store';
-import { reducers, metaReducers } from './store/app.reducers';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { environment } from '../environments/environment';
-import { EffectsModule } from '@ngrx/effects';
-import { effects } from './store/app.effects';
+import { GraphQLModule } from './apollo.config';
+import { SignupComponent } from './signup/signup.component';
+import { AuthService } from './auth/auth.service';
 
 registerLocaleData(localeDe, 'de');
 
@@ -32,6 +29,7 @@ registerLocaleData(localeDe, 'de');
     LoginComponent,
     PageNotFoundComponent,
     OrdersComponent,
+    SignupComponent,
   ],
   imports: [
     BrowserModule,
@@ -41,11 +39,12 @@ registerLocaleData(localeDe, 'de');
     HttpClientModule,
     BrowserAnimationsModule,
     SharedModule,
-    StoreModule.forRoot(reducers, { metaReducers }),
-    EffectsModule.forRoot(effects),
-    !environment.production ? StoreDevtoolsModule.instrument() : [],
+    GraphQLModule,
   ],
-  providers: [{ provide: LOCALE_ID, useValue: 'de' }],
+  providers: [
+    { provide: LOCALE_ID, useValue: 'de' },
+    AuthService,
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
