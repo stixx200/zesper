@@ -13,7 +13,14 @@
 
 ## When needed
 
-- Deploy prisma schema with `prisma deploy` in directory 'apps/api/src/prisma'
+- Deploy prisma schema with `prisma deploy -e ../../../../config/dev.env` in directory 'apps/api/src/prisma'
+- Access to prisma with browser now needs access token. Token can be aquired with `prisma token -e ../../../../config/dev.env`
+  This token needs to be included in the playground "HTTP HEADERS" section. Example:
+  ```
+  {
+    "Authorization": "Bearer <aquired token>"
+  }
+  ```
 
 The following commands are executed in project root:
 

@@ -1,3 +1,4 @@
-endpoint: http://localhost:4466/zesper/default
+endpoint: ${env:PRISMA_ENDPOINT}
 datamodel: datamodel.prisma
 databaseType: document
+secret: ${env:PRISMA_SECRET}
