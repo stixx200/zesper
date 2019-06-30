@@ -5,8 +5,9 @@ import { Prisma } from './generated/prisma.binding';
 export class PrismaService extends Prisma {
   constructor() {
     super({
-      endpoint: 'http://localhost:4466/zesper/default',
+      endpoint: 'http://localhost:4466/zesper/dev',
       debug: false,
+      secret: process.env.PRISMA_SECRET,
     });
   }
 }
