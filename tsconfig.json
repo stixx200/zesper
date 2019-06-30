@@ -7,8 +7,8 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": true,
-    "target": "es5",
-    "module": "es2015",
+    "target": "es2015",
+    "module": "esnext",
     "typeRoots": ["node_modules/@types"],
     "lib": ["es2017", "dom", "esnext.asynciterable"],
     "skipLibCheck": true,
@@ -17,7 +17,8 @@
     "paths": {
       "@zesper/api-interface": ["libs/api-interface/src/index.ts"],
       "@zesper/api/*": ["apps/api/src/*"]
-    }
+    },
+    "rootDir": "."
   },
   "exclude": ["node_modules", "tmp"]
 }
