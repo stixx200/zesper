@@ -1,10 +1,10 @@
 import { Request } from 'express';
 import { Module } from '@nestjs/common';
-
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { GraphQLModule } from '@nestjs/graphql';
-import { UsersModule } from '../users/users.module';
+import { AppController } from './app.controller';
+
+import { UsersModule } from '@zesper/api/users/users.module';
+import { AppService } from './app.service';
 
 @Module({
   imports: [

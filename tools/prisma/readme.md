@@ -13,8 +13,8 @@
 
 ## When needed
 
-- Deploy prisma schema with `prisma deploy -e ../../../../config/dev.env` in directory 'apps/api/src/prisma'
-- Access to prisma with browser now needs access token. Token can be aquired with `prisma token -e ../../../../config/dev.env`
+- Deploy prisma schema with `prisma deploy -e ../../../../config/development.env` in directory 'apps/api/src/prisma'
+- Access to prisma with browser now needs access token. Token can be aquired with `prisma token -e ../../../../config/development.env`
   This token needs to be included in the playground "HTTP HEADERS" section. Example:
   ```
   {

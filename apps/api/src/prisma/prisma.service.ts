@@ -1,13 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from './generated/prisma.binding';
+import { ConfigurationService } from '../configuration/configuration.service';
 
 @Injectable()
 export class PrismaService extends Prisma {
-  constructor() {
+  constructor(private config: ConfigurationService) {
     super({
-      endpoint: 'http://localhost:4466/zesper/dev',
+      endpoint: config.prismaEndpoint,
       debug: false,
-      secret: process.env.PRISMA_SECRET,
+      secret: config.prismaSecret,
     });
   }
 }
