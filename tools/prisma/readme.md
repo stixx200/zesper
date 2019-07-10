@@ -24,6 +24,6 @@
 
 The following commands are executed in project root:
 
-- Get schema from prisma server with `graphql get-schema --project database`
-- Generate typescript typings with `graphql codegen --project database`
+- Get schema from prisma server with `prisma:get-schema`
+- Generate typescript typings with `prisma:codegen`
   

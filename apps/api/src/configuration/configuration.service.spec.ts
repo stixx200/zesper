@@ -6,6 +6,16 @@ import mock from 'mock-fs';
 describe('ConfigurationService', () => {
   let service: ConfigurationService;
   let configContent: string;
+  let oldEnv;
+
+  beforeAll(() => {
+    oldEnv = process.env.NODE_ENV;
+    process.env.NODE_ENV = 'test';
+  });
+
+  afterAll(() => {
+    process.env.NODE_ENV = oldEnv;
+  });
 
   describe('invalid configuration', function() {
     afterEach(() => {

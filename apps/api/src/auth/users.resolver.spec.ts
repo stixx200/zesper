@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { UsersResolver } from './users.resolver';
 import { PrismaService } from '../prisma/prisma.service';
 import * as bcrypt from 'bcryptjs';
-import { AuthPayload } from '@zesper/api-interface';
+import { AuthPayload, CreateUserInput } from '@zesper/api-interface';
 
 jest.mock('bcryptjs');
 jest.mock('../prisma/prisma.service');
@@ -110,7 +110,7 @@ describe('UsersResolver', () => {
   });
 
   describe('createUser', () => {
-    const createUserData = {
+    const createUserData: { data: CreateUserInput } = {
       data: {
         email: 'test@email.de',
         name: 'name',
@@ -124,6 +124,7 @@ describe('UsersResolver', () => {
         id: '1',
         email: createUserData.data.email,
         name: createUserData.data.name,
+        isAdmin: false,
       },
     };
 
@@ -160,6 +161,26 @@ describe('UsersResolver', () => {
       expect(prismaServiceMock.mutation.createUser).toBeCalledWith({
         data: {
           ...createUserData.data,
+          admin: false,
+          password: 'hashed',
+        },
+      });
+    });
+
+    it('can create a admin user', async () => {
+      await resolver.createUser(
+        {
+          data: {
+            ...createUserData.data,
+            isAdmin: true,
+          },
+        },
+        '',
+      );
+      expect(prismaServiceMock.mutation.createUser).toBeCalledWith({
+        data: {
+          ...createUserData.data,
+          admin: true,
           password: 'hashed',
         },
       });
@@ -173,6 +194,7 @@ describe('UsersResolver', () => {
           id: '1',
           name: createUserData.data.name,
           email: createUserData.data.email,
+          isAdmin: false,
         },
       });
     });

@@ -13,6 +13,7 @@ type User {
   id: ID!
   email: String!
   name: String!
+  isAdmin: Boolean!
 }
 
 input UserQuery {
@@ -24,6 +25,7 @@ input CreateUserInput {
   name: String!
   email: String!
   password: String!
+  isAdmin: Boolean
 }
 
 input LoginUserInput {
