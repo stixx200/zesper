@@ -5,16 +5,24 @@
     <button id="btn-orders" mat-button class="navbar-element" routerLink="orders" routerLinkActive="active">
       <span i18n="Navbar entry for orders">Orders</span>
     </button>
-
-    <!-- This fills the remaining space of the current row -->
-    <span class="fill-remaining-space"></span>
-
-    <div id="btn-user" routerLink="/user" routerLinkActive="active" class="account-icon navbar-element">
-      <mat-icon class="icon">account_circle</mat-icon>
-      <span class="account-icon-title">{{(currentUser$ | async)?.email}}</span>
-    </div>
-
-    <mat-icon id="btn-logout" (click)="logout()" class="icon navbar-element">lock_open</mat-icon>
-    <span class="small-space"></span>
   </ng-template>
+
+  <!-- This fills the remaining space of the current row -->
+  <span class="fill-remaining-space"></span>
+
+  <ng-template [ngIf]="(currentUser$ | async)">
+      <div id="btn-user" routerLink="/user" routerLinkActive="active" class="account-icon navbar-element">
+        <mat-icon>account_circle</mat-icon>
+        <span class="account-icon-title">{{(currentUser$ | async)?.email}}</span>
+      </div>
+  
+      <mat-icon id="btn-logout" (click)="logout()" class="navbar-element">lock_open</mat-icon>
+    </ng-template>
+
+    <ng-template [ngIf]="!(currentUser$ | async)">
+        <span routerLink="/login" routerLinkActive="active" class="pointer navbar-element">login</span>
+        <span routerLink="/signup" routerLinkActive="active" class="pointer navbar-element">signup</span>
+    </ng-template>
+
+    <span class="small-space"></span>
 </mat-toolbar>

@@ -2,19 +2,16 @@
   flex: 1 1 auto;
 }
 
-.icon {
-  padding: 0 1rem;
-  cursor: pointer;
-}
-
 .small-space {
   width: 1rem;
 }
 
 .navbar-element {
+  padding: 0 1rem;
   height: 100%;
   border-radius: 0;
   cursor: pointer;
+  font-size: initial;
 
   display: flex;
   align-items: center;

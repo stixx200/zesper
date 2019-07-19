@@ -7,6 +7,8 @@ import gql from 'graphql-tag';
 import { take } from 'rxjs/operators';
 import { parseGraphQLError } from '../shared/graphql.helpers';
 import { ApolloQueryResult } from 'apollo-client';
+import { MatSnackBar } from '@angular/material';
+import { ErrorSnackbarComponent } from '../shared/error-snackbar/error-snackbar.component';
 
 export const getUserQuery = gql`
   query getUser($id: ID!) {
@@ -24,7 +26,9 @@ export const getUserQuery = gql`
 export class UserService {
   currentUser$: BehaviorSubject<User> = new BehaviorSubject<User>(null);
 
-  constructor(private readonly apollo: Apollo, private readonly authService: AuthService) {}
+  constructor(private readonly apollo: Apollo, 
+              private readonly authService: AuthService,
+              private readonly snackBar: MatSnackBar) {}
 
   init() {
     const userId = this.authService.userId;
@@ -36,7 +40,10 @@ export class UserService {
       }).pipe(take(1)).subscribe(({ data }: ApolloQueryResult<{ user: User }>) => {
         this.login(data.user, authToken);
       }, (error) => {
-        console.error(parseGraphQLError(error));
+        this.snackBar.openFromComponent(ErrorSnackbarComponent, {
+          data: error,
+          horizontalPosition: 'end',
+        });
       });
     }
   }

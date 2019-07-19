@@ -1,0 +1,16 @@
+.snackbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 50px;
+  background-color: #BB3F30;
+  padding: 10px 20px;
+}
+.snackbar div {
+  flex: 1;
+  color: white;
+}
+button {
+  margin-left: 5px;
+  color: black !important;
+}

@@ -1,10 +1,22 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatIconModule, MatToolbarModule } from '@angular/material';
+import { MatButtonModule, MatIconModule, MatSnackBarModule, MatToolbarModule } from '@angular/material';
+import { ErrorSnackbarComponent } from './error-snackbar/error-snackbar.component';
+
+const materialModules = [
+  MatToolbarModule,
+  MatIconModule,
+  MatSnackBarModule,
+  MatButtonModule,
+];
 
 @NgModule({
-  declarations: [],
-  imports: [CommonModule, MatToolbarModule, MatIconModule],
-  exports: [MatToolbarModule, MatIconModule]
+  declarations: [ErrorSnackbarComponent],
+  imports: [
+    CommonModule,
+    ...materialModules,
+  ],
+  exports: [...materialModules],
+  entryComponents: [ErrorSnackbarComponent],
 })
 export class SharedModule {}

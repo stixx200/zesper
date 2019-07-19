@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { ApolloLink } from 'apollo-link';
 
 const localStorageUserId = 'USER_ID';
 const localStorageAuthToken = 'AUTH_TOKEN';
@@ -7,6 +8,15 @@ const localStorageAuthToken = 'AUTH_TOKEN';
 export class AuthService {
   userId: string = null;
   authToken: string = null;
+
+  authLink = new ApolloLink((operation, forward) => {
+    operation.setContext({
+      headers: {
+        authorization: this.authToken ? `Bearer ${this.authToken}` : ''
+      }
+    });
+    return forward(operation);
+  });
 
   constructor() {
     // get user id from localStorage

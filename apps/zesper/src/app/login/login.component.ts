@@ -7,6 +7,8 @@ import { Router } from '@angular/router';
 import { parseGraphQLError } from '../shared/graphql.helpers';
 import { UserService } from '../user/user.service';
 import { Subscription } from 'rxjs';
+import { MatSnackBar } from '@angular/material';
+import { ErrorSnackbarComponent } from '../shared/error-snackbar/error-snackbar.component';
 
 export const loginMutation = gql`
   mutation LoginMutation($email: String!, $password: String!) {
@@ -35,9 +37,10 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   private userLoggedInSubscription: Subscription;
 
-  constructor(private userService: UserService,
-              private apollo: Apollo,
-              private router: Router) {
+  constructor(private readonly userService: UserService,
+              private readonly apollo: Apollo,
+              private readonly router: Router,
+              private readonly snackBar: MatSnackBar) {
   }
 
   ngOnInit() {
@@ -63,9 +66,11 @@ export class LoginComponent implements OnInit, OnDestroy {
       variables: loginForm.value,
     }).subscribe(({ data }) => {
       this.userService.login(data.login.user, data.login.token);
-      this.router.navigate(['/']);
     }, (error) => {
-      console.error(parseGraphQLError(error));
+      this.snackBar.openFromComponent(ErrorSnackbarComponent, {
+        data: error,
+        horizontalPosition: 'end',
+      });
     });
   }
 }
