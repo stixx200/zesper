@@ -16,7 +16,7 @@ export class ErrorSnackbarComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.error(parseGraphQLError(this.data));
+    console.error(JSON.stringify(this.data));
   }
 
   close() {

@@ -14,6 +14,9 @@ export class UserComponent implements OnInit {
   ngOnInit() {}
 
   update() {
+  }
 
+  delete() {
+    this.userService.delete();
   }
 }

@@ -9,7 +9,8 @@
       "request": "launch",
       "name": "Launch api",
       "program": "${workspaceFolder}/apps/api/src/main.ts",
-      "outFiles": ["${workspaceFolder}/dist/**/*.js"]
+      "outFiles": ["${workspaceFolder}/dist/**/*.js"],
+      "envFile": "${workspaceFolder}/config/development.env"
     },
     {
       "type": "node",

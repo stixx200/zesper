@@ -38,8 +38,11 @@
     </mat-card-content>
     <mat-card-actions>
       <div class="center">
-        <button mat-raised-button type="submit" class="center" color="primary">
+        <button mat-raised-button type="submit" class="center" color="primary" disabled title="not implemented yet" (click)="update()">
           Update
+        </button>
+        <button mat-raised-button type="button" class="center" color="error" title="Delete current user" (click)="delete()">
+          Delete
         </button>
       </div>
     </mat-card-actions>

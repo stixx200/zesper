@@ -17,21 +17,21 @@ export class UsersResolver {
     });
   }
 
-  // private static getUserId(request: Request, requireAuth = true) {
-  //   const header = request.headers.authorization as string;
-  //
-  //   if (header) {
-  //     const token = header.replace('Bearer ', '');
-  //     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-  //     return decoded.userId;
-  //   }
-  //
-  //   if (requireAuth) {
-  //     throw new Error('Authentication required');
-  //   }
-  //
-  //   return null;
-  // }
+  private static getUserId(headers: Headers, requireAuth = true) {
+    const authHeader = headers['authorization'];
+  
+    if (authHeader) {
+      const token = authHeader.replace('Bearer ', '');
+      const decoded = jwt.verify(token, process.env.JWT_SECRET) as any;
+      return decoded.userId;
+    }
+  
+    if (requireAuth) {
+      throw new Error('Authentication required');
+    }
+  
+    return null;
+  }
 
   @Query()
   @UseGuards(GqlAuthGuard)
@@ -118,12 +118,11 @@ export class UsersResolver {
   @Mutation()
   @UseGuards(GqlAuthGuard)
   async deleteUser(@Args() args, @Context() ctx, @Info() info): Promise<User> {
-    // const userId = UsersResolver.getUserId(ctx.request);
+    const userId = UsersResolver.getUserId(ctx.req.headers);
     return await this.prisma.mutation.deleteUser(
       {
         where: {
-          // id: userId,
-          id: '1',
+          id: userId,
         },
       },
       info,

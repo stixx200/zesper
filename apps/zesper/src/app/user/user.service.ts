@@ -20,6 +20,14 @@ export const getUserQuery = gql`
   }
 `;
 
+export const deleteUserMutation = gql`
+  mutation DeleteUser {
+    deleteUser {
+      id
+    }
+  }
+`;
+
 @Injectable({
   providedIn: 'root',
 })
@@ -56,5 +64,28 @@ export class UserService {
   logout() {
     this.authService.logout();
     this.currentUser$.next(null);
+  }
+
+  delete() {
+    const currentUser = this.getCurrentUser();
+    if (!currentUser) {
+      throw new Error("Can't delete user, because there is currently no user logged in.");
+    }
+
+    this.apollo.mutate<{ deleteUser: User }>({ mutation: deleteUserMutation }).subscribe(({ data }) => {
+      console.log(`Deleted user ${data.deleteUser.id}`);
+      this.logout();    
+    }, (error) => {
+      this.snackBar.openFromComponent(ErrorSnackbarComponent, {
+        data: error,
+        horizontalPosition: 'end',
+      });
+    });
+  }
+
+  private getCurrentUser(): User {
+    let currentUser;
+    this.currentUser$.pipe(take(1)).subscribe((user: User) => (currentUser = user));
+    return currentUser;
   }
 }
