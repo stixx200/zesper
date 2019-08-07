@@ -1,12 +1,20 @@
 type Query {
   users: [User!]!
   user(query: UserQuery!): User!
+  menus: [Menu!]!
+  foods: [Food]!
 }
 
 type Mutation {
   createUser(data: CreateUserInput!): AuthPayload!
   login(data: LoginUserInput!): AuthPayload!
   deleteUser: User!
+  createMenu(name: String!, foodIds: [FoodLink!]!): Menu!
+  updateMenu(menuId: ID!, name: String, foodIds: [FoodLink!]): Menu!
+  deleteMenu(id: ID!): Menu!
+  createFood(name: String!, price: Float!): Food!
+  updateFood(foodId: ID!, name: String, price: Float): Food!
+  deleteFood(id: ID!): Food!
 }
 
 type User {
@@ -25,7 +33,6 @@ input CreateUserInput {
   name: String!
   email: String!
   password: String!
-  isAdmin: Boolean
 }
 
 input LoginUserInput {
@@ -36,4 +43,20 @@ input LoginUserInput {
 type AuthPayload {
   token: String!
   user: User!
+}
+
+type Menu {
+  id: ID!
+  name: String!
+  items: [Food!]!
+}
+
+type Food {
+  id: ID!
+  name: String!
+  price: Float!
+}
+
+input FoodLink {
+  id: ID!
 }

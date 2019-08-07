@@ -13,8 +13,8 @@
 
 ## When needed
 
-- Deploy prisma schema with `prisma deploy -e ../../../../config/development.env` in directory 'apps/api/src/prisma'
-- Access to prisma with browser now needs access token. Token can be aquired with `prisma token -e ../../../../config/development.env`
+- Deploy prisma schema with `npm run prisma:deploy` in directory 'apps/api/src/prisma'
+- Access to prisma with browser now needs access token. Token can be aquired with `npm run prisma:token`
   This token needs to be included in the playground "HTTP HEADERS" section. Example:
   ```
   {
@@ -22,8 +22,6 @@
   }
   ```
 
-The following commands are executed in project root:
-
-- Get schema from prisma server with `prisma:get-schema`
-- Generate typescript typings with `prisma:codegen`
+- Get schema from prisma server with `npm  run prisma:get-schema`
+- Generate typescript typings with `npm run prisma:codegen`
   

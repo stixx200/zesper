@@ -2,14 +2,19 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { UsersResolver } from './users.resolver';
 import { PrismaService } from '../prisma/prisma.service';
 import * as bcrypt from 'bcryptjs';
-import { AuthPayload, CreateUserInput } from '@zesper/api-interface';
+import { CreateUserInput, LoginUserInput } from '@zesper/api-interface';
+import { ConfigurationModule } from '../configuration/configuration.module';
+import { AuthService } from './auth.service';
+import { User } from '../generated/prisma.binding';
 
 jest.mock('bcryptjs');
 jest.mock('../prisma/prisma.service');
+jest.mock('./auth.service');
 
 describe('UsersResolver', () => {
   let resolver: UsersResolver;
   let prismaServiceMock;
+  let authServiceMock;
 
   beforeAll(() => {
     process.env.JWT_SECRET = 'testsecret';
@@ -17,11 +22,15 @@ describe('UsersResolver', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [UsersResolver, PrismaService],
+      imports: [ConfigurationModule],
+      providers: [UsersResolver, PrismaService, AuthService],
     }).compile();
 
     resolver = module.get<UsersResolver>(UsersResolver);
     prismaServiceMock = module.get<PrismaService>(PrismaService);
+    authServiceMock = module.get(AuthService);
+    authServiceMock.generateToken.mockReturnValue('token');
+    authServiceMock.generateToken();
   });
 
   it('should be defined', () => {
@@ -110,6 +119,10 @@ describe('UsersResolver', () => {
   });
 
   describe('createUser', () => {
+    beforeEach(() => {
+      prismaServiceMock.query.users.mockResolvedValue([]);
+    });
+
     const createUserData: { data: CreateUserInput } = {
       data: {
         email: 'test@email.de',
@@ -118,14 +131,12 @@ describe('UsersResolver', () => {
       },
     };
 
-    const createUserReturnData: AuthPayload = {
-      token: 'token',
-      user: {
-        id: '1',
-        email: createUserData.data.email,
-        name: createUserData.data.name,
-        isAdmin: false,
-      },
+    const createUserReturnData: User = {
+      id: '1',
+      email: createUserData.data.email,
+      name: createUserData.data.name,
+      password: '123abc',
+      admin: false,
     };
 
     beforeEach(() => {
@@ -159,41 +170,117 @@ describe('UsersResolver', () => {
       bcrypt.hash.mockResolvedValue('hashed');
       await resolver.createUser(createUserData, '');
       expect(prismaServiceMock.mutation.createUser).toBeCalledWith({
-        data: {
-          ...createUserData.data,
-          admin: false,
+        data: expect.objectContaining({
           password: 'hashed',
-        },
+        }),
       });
     });
 
-    it('can create a admin user', async () => {
-      await resolver.createUser(
-        {
-          data: {
-            ...createUserData.data,
-            isAdmin: true,
-          },
-        },
-        '',
-      );
+    it('creates first user as admin', async () => {
+      await resolver.createUser(createUserData, '');
       expect(prismaServiceMock.mutation.createUser).toBeCalledWith({
-        data: {
-          ...createUserData.data,
+        data: expect.objectContaining({
           admin: true,
-          password: 'hashed',
-        },
+        }),
       });
+    });
+
+    it('creates users after first user as non-admin', async () => {
+      prismaServiceMock.query.users.mockResolvedValue([{}]);
+      await resolver.createUser(createUserData, '');
+      expect(prismaServiceMock.mutation.createUser).toBeCalledWith({
+        data: expect.objectContaining({
+          admin: false,
+        }),
+      });
+    });
+
+    it('calls auth service to generate jwt token', async () => {
+      await resolver.createUser(createUserData, '');
+      expect(authServiceMock.generateToken).toHaveBeenCalled();
     });
 
     it('returns an object containing the user and the jwt', async () => {
       const result = await resolver.createUser(createUserData, '');
-      expect(result.user).toEqual({
+      expect(result).toEqual({
         token: 'token',
         user: {
           id: '1',
           name: createUserData.data.name,
           email: createUserData.data.email,
+          isAdmin: false,
+        },
+      });
+    });
+  });
+
+  describe('login', () => {
+    let loginUserData: { data: LoginUserInput };
+    let loginUserReturnData: User;
+
+    beforeEach(() => {
+      loginUserData = {
+        data: {
+          email: 'test@email.de',
+          password: 'pw',
+        },
+      };
+
+      loginUserReturnData = {
+        id: '1',
+        email: loginUserData.data.email,
+        name: 'name',
+        password: 'hashedPassword',
+        admin: false,
+      };
+
+      prismaServiceMock.query.user.mockResolvedValue(loginUserReturnData);
+      bcrypt.compare.mockResolvedValue(true);
+    });
+
+    it('queries prisma for user with email', async () => {
+      await resolver.login(loginUserData, '');
+      expect(prismaServiceMock.query.user).toBeCalledWith({
+        where: {
+          email: loginUserData.data.email,
+        },
+      });
+    });
+
+    it('throws an error if user does not exist', async () => {
+      expect.assertions(1);
+      prismaServiceMock.query.user.mockResolvedValueOnce(undefined);
+      try {
+        loginUserData.data.email = 'not@existing.de';
+        await resolver.login(loginUserData, '');
+      } catch (err) {
+        expect(err.message).toMatch(/Unable to authenticate/);
+      }
+    });
+
+    it('uses bcrypt to compare password', async () => {
+      await resolver.login(loginUserData, '');
+      expect(bcrypt.compare).toBeCalledWith(loginUserData.data.password, loginUserReturnData.password);
+    });
+
+    it('throws an error if bcrypt compare fails', async () => {
+      expect.assertions(1);
+      bcrypt.compare.mockResolvedValue(false);
+      try {
+        await resolver.login(loginUserData, '');
+      } catch (err) {
+        expect(err.message).toMatch(/Unable to authenticate/);
+      }
+    });
+
+    it('returns an object containing the user and the jwt', async () => {
+      const result = await resolver.login(loginUserData, '');
+      expect(result).toEqual({
+        token: 'token',
+        user: {
+          id: '1',
+          name: loginUserReturnData.name,
+          email: loginUserReturnData.email,
           isAdmin: false,
         },
       });

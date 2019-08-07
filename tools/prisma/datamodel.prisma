@@ -6,6 +6,12 @@ type User {
   admin: Boolean!
 }
 
+type Menu {
+  id: ID! @id
+  name: String!
+  items: [Food!]! @relation(link: INLINE)
+}
+
 type Order {
   id: ID! @id
   user: User! @relation(link: INLINE)

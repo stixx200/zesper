@@ -4,6 +4,10 @@ import { GqlExecutionContext } from '@nestjs/graphql';
 
 @Injectable()
 export class GqlAuthGuard extends AuthGuard('bearer') {
+  constructor() {
+    super();
+  }
+  // noinspection JSMethodCanBeStatic
   getRequest(context: ExecutionContext) {
     const ctx = GqlExecutionContext.create(context);
     return ctx.getContext().req;

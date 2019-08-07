@@ -24,6 +24,6 @@ services:
     ports:
       - "27018:27018"
     volumes:
-      - mongo:/var/lib/mongo
+      - mongo:/data/db
 volumes:
   mongo:

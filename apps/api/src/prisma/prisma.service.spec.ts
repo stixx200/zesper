@@ -1,7 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaService } from './prisma.service';
 
-jest.mock('./generated/prisma.binding');
+jest.mock('../generated/prisma.binding');
+jest.mock('../configuration/configuration.service');
 
 describe('PrismaService', () => {
   let service: PrismaService;

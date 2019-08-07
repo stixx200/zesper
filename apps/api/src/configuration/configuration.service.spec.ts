@@ -1,7 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ConfigurationService } from './configuration.service';
-// import * as mock from 'mock-fs';
-import mock from 'mock-fs';
+import * as mock from 'mock-fs';
 
 describe('ConfigurationService', () => {
   let service: ConfigurationService;
@@ -17,14 +16,14 @@ describe('ConfigurationService', () => {
     process.env.NODE_ENV = oldEnv;
   });
 
-  describe('invalid configuration', function() {
+  describe('invalid configuration', () => {
     afterEach(() => {
       mock.restore();
     });
 
     it('throws error if PRISMA_ENDPOINT is missing', async () => {
       configContent = `
-        PRISMA_SECRET=secret1        
+        PRISMA_SECRET=secret1
         JWT_SECRET=secret2
       `;
 
@@ -37,7 +36,7 @@ describe('ConfigurationService', () => {
 
     it('throws error if PRISMA_SECRET is missing', async () => {
       configContent = `
-        PRISMA_ENDPOINT=http://endpoint        
+        PRISMA_ENDPOINT=http://endpoint
         JWT_SECRET=secret2
       `;
 
@@ -50,8 +49,8 @@ describe('ConfigurationService', () => {
 
     it('throws error if JWT_SECRET is missing', async () => {
       configContent = `
-        PRISMA_ENDPOINT=http://endpoint        
-        PRISMA_SECRET=secret1                
+        PRISMA_ENDPOINT=http://endpoint
+        PRISMA_SECRET=secret1
       `;
 
       mock({
@@ -62,7 +61,7 @@ describe('ConfigurationService', () => {
     });
   });
 
-  describe('with valid configuration', function() {
+  describe('with valid configuration', () => {
     beforeEach(async () => {
       configContent = `
         JWT_SECRET=secret
@@ -90,15 +89,15 @@ describe('ConfigurationService', () => {
       mock.restore();
     });
 
-    it('returns expected value with jwtSecret getter', function() {
+    it('returns expected value with jwtSecret getter', () => {
       expect(service.jwtSecret).toEqual('secret');
     });
 
-    it('returns expected value with prismaSecret getter', function() {
+    it('returns expected value with prismaSecret getter', () => {
       expect(service.prismaSecret).toEqual('secret2');
     });
 
-    it('returns expected value with jwtSecret getter', function() {
+    it('returns expected value with jwtSecret getter', () => {
       expect(service.prismaEndpoint).toEqual('ep');
     });
   });

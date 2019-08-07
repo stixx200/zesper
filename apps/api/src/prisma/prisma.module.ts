@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
-import { ConfigurationModule } from '@zesper/api/configuration/configuration.module';
+import { ConfigurationModule } from '../configuration/configuration.module';
 
 @Module({
   providers: [PrismaService],

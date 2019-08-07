@@ -1,42 +1,30 @@
 import * as bcrypt from 'bcryptjs';
-import * as jwt from 'jsonwebtoken';
 import { Resolver, Query, Mutation, Args, Info, Context } from '@nestjs/graphql';
 import { PrismaService } from '../prisma/prisma.service';
-import { User, CreateUserInput, LoginUserInput, AuthPayload, UserQuery } from '@zesper/api-interface';
+import { CreateUserInput, LoginUserInput, AuthPayload, UserQuery } from '@zesper/api-interface';
+import { User } from '../generated/prisma.binding';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from './gql-auth.guard';
-import { UserCreateInput } from '@zesper/api/prisma/generated/prisma.binding';
+import { UserCreateInput } from '../generated/prisma.binding';
+import { ConfigurationService } from '../configuration/configuration.service';
+import { AuthService } from './auth.service';
 
 @Resolver('Users')
 export class UsersResolver {
-  constructor(private readonly prisma: PrismaService) {}
-
-  private static generateToken(data: { id: String }) {
-    return jwt.sign({ userId: data.id }, process.env.JWT_SECRET, {
-      expiresIn: '1d',
-    });
-  }
-
-  private static getUserId(headers: Headers, requireAuth = true) {
-    const authHeader = headers['authorization'];
-  
-    if (authHeader) {
-      const token = authHeader.replace('Bearer ', '');
-      const decoded = jwt.verify(token, process.env.JWT_SECRET) as any;
-      return decoded.userId;
-    }
-  
-    if (requireAuth) {
-      throw new Error('Authentication required');
-    }
-  
-    return null;
-  }
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly config: ConfigurationService,
+    private readonly auth: AuthService,
+  ) {}
 
   @Query()
   @UseGuards(GqlAuthGuard)
   async users(@Args() args, @Info() info): Promise<User[]> {
-    return await this.prisma.query.users(args, info);
+    const users = await this.prisma.query.users(args, info);
+    return users.map(user => ({
+      ...user,
+      isAdmin: user.admin,
+    }));
   }
 
   /**
@@ -71,14 +59,15 @@ export class UsersResolver {
     if (emailTaken) {
       throw new Error('Email already taken!');
     }
+    const users = await this.prisma.query.users({});
 
-    const password = await bcrypt.hash(args.data.password, 10);
+    const hashedPassword = await bcrypt.hash(args.data.password, 10);
 
     const data: UserCreateInput = {
       name: args.data.name,
       email: args.data.email,
-      password,
-      admin: !!args.data.isAdmin,
+      password: hashedPassword,
+      admin: users.length === 0,
     };
     const user = await this.prisma.mutation.createUser({
       data,
@@ -86,10 +75,10 @@ export class UsersResolver {
 
     return {
       user: {
-        ...user,
+        ...this.adaptUserForPayload(user),
         isAdmin: user.admin,
       },
-      token: UsersResolver.generateToken({ id: user.id }),
+      token: this.auth.generateToken({ id: user.id }),
     };
   }
 
@@ -108,24 +97,30 @@ export class UsersResolver {
     }
     return {
       user: {
-        ...user,
+        ...this.adaptUserForPayload(user),
         isAdmin: user.admin,
       },
-      token: UsersResolver.generateToken({ id: user.id }),
+      token: this.auth.generateToken({ id: user.id }),
     };
   }
 
   @Mutation()
   @UseGuards(GqlAuthGuard)
   async deleteUser(@Args() args, @Context() ctx, @Info() info): Promise<User> {
-    const userId = UsersResolver.getUserId(ctx.req.headers);
+    // const userId = UsersResolver.getUserId(ctx.request);
+    const id = await this.auth.validateToken(ctx.req.headers.authorization);
     return await this.prisma.mutation.deleteUser(
       {
         where: {
-          id: userId,
+          id,
         },
       },
       info,
     );
+  }
+
+  private adaptUserForPayload(input: User) {
+    const { admin, password, ...remaining } = input;
+    return remaining;
   }
 }

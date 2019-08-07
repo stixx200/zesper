@@ -10,7 +10,7 @@ export class HttpStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(token: string) {
-    const user = await this.authService.validateUser(token);
+    const user = await this.authService.validateToken(token);
     if (!user) {
       throw new UnauthorizedException();
     }
