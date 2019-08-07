@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ConfigurationService } from './configuration.service';
-import * as mock from 'mock-fs';
+import { default as mock } from 'mock-fs';
 
 describe('ConfigurationService', () => {
   let service: ConfigurationService;

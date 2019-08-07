@@ -10,6 +10,7 @@ import { User } from '../generated/prisma.binding';
 jest.mock('bcryptjs');
 jest.mock('../prisma/prisma.service');
 jest.mock('./auth.service');
+jest.mock('../configuration/configuration.service');
 
 describe('UsersResolver', () => {
   let resolver: UsersResolver;

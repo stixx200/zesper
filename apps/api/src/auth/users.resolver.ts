@@ -20,11 +20,7 @@ export class UsersResolver {
   @Query()
   @UseGuards(GqlAuthGuard)
   async users(@Args() args, @Info() info): Promise<User[]> {
-    const users = await this.prisma.query.users(args, info);
-    return users.map(user => ({
-      ...user,
-      isAdmin: user.admin,
-    }));
+    return await this.prisma.query.users(args, info);
   }
 
   /**
