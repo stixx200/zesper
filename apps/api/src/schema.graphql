@@ -10,7 +10,7 @@ type Mutation {
   login(data: LoginUserInput!): AuthPayload!
   deleteUser: User!
   createMenu(name: String!, foodIds: [FoodLink!]!): Menu!
-  updateMenu(menuId: ID!, name: String, foodIds: [FoodLink!]): Menu!
+  updateMenu(menuId: ID!, foodIds: [FoodLink!], name: String): Menu!
   deleteMenu(id: ID!): Menu!
   createFood(name: String!, price: Float!): Food!
   updateFood(foodId: ID!, name: String, price: Float): Food!

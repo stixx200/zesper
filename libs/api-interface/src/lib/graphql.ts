@@ -51,7 +51,7 @@ export abstract class IMutation {
 
     abstract createMenu(name: string, foodIds: FoodLink[]): Menu | Promise<Menu>;
 
-    abstract updateMenu(menuId: string, name?: string, foodIds: FoodLink[]): Menu | Promise<Menu>;
+    abstract updateMenu(menuId: string, foodIds: FoodLink[], name?: string): Menu | Promise<Menu>;
 
     abstract deleteMenu(id: string): Menu | Promise<Menu>;
 
