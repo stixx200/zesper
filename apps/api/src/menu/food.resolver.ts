@@ -4,6 +4,19 @@ import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from '../auth/gql-auth.guard';
 import { Food } from '@zesper/api-interface';
 
+interface CreateFoodArgs {
+  name: string;
+  price: number;
+}
+
+interface UpdateFoodArgs extends CreateFoodArgs {
+  foodId: string;
+}
+
+interface DeleteFoodArgs {
+  id: string;
+}
+
 @Resolver('Food')
 export class FoodResolver {
   constructor(private readonly prisma: PrismaService) {}
@@ -16,7 +29,7 @@ export class FoodResolver {
 
   @Mutation()
   @UseGuards(GqlAuthGuard)
-  async createFood(@Args() args, @Info() info): Promise<Food> {
+  async createFood(@Args() args: CreateFoodArgs, @Info() info): Promise<Food> {
     return this.prisma.mutation.createFood({
       data: {
         name: args.name,
@@ -27,7 +40,7 @@ export class FoodResolver {
 
   @Mutation()
   @UseGuards(GqlAuthGuard)
-  async updateFood(@Args() args, @Info() info): Promise<Food> {
+  async updateFood(@Args() args: UpdateFoodArgs, @Info() info): Promise<Food> {
     return this.prisma.mutation.updateFood({
       data: {
         name: args.name,
@@ -41,7 +54,7 @@ export class FoodResolver {
 
   @Mutation()
   @UseGuards(GqlAuthGuard)
-  async deleteFood(@Args() args, @Info() info): Promise<Food> {
+  async deleteFood(@Args() args: DeleteFoodArgs, @Info() info): Promise<Food> {
     return this.prisma.mutation.deleteFood({ where: { id: args.id } });
   }
 }
